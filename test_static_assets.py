@@ -14,11 +14,18 @@ from django.contrib.staticfiles import finders
 
 SCRIPTS_REGEX = r"<script.*src=[\"']{% static [\"'](.*)[\"'] %}\".*</script>"
 LINKS_REGEX = r"<link.*href=[\"']{% static [\"'](.*)[\"'] %}[\"']"
+UNWANTED_ASSETS = tuple()
 
 
 class AssetsTestCase(TestCase):
     """TestCase to check if all static assets in the app are reachable."""
     pass
+
+
+def remove_unwanted_assets(field):
+    """Filter out unwanted static files that shouldn't be checked."""
+
+    return field not in UNWANTED_ASSETS
 
 
 def build_test(asset, file_path):
@@ -51,6 +58,10 @@ def parse_templates(file_path):
 
         app_scripts = re.findall(SCRIPTS_REGEX, content)
         app_links = re.findall(LINKS_REGEX, content)
+
+        # Remove static files that shouldn't be checked
+        app_scripts = filter(remove_unwanted_assets, app_scripts)
+        app_links = filter(remove_unwanted_assets, app_links)
 
         return {
             'scripts': (app_scripts,),

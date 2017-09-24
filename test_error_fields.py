@@ -18,7 +18,7 @@ FORMS_REGEX = re.compile(r"{[{%]\s*.*\b(\w*form(?!set)\w*)\.\w+\s*[%}]}")
 NON_FIELD_ERROR_REGEX = re.compile(r'{{\s*(.*form\w*\.non_field_errors)\s*}}')
 
 UNWANTED_FIELDS = (
-    'form.remember', 'form.non_field_errors', 'form.mechanic_id',
+    'form.remember', 'form.non_field_errors'
 )
 
 class FormTestCase(TestCase):

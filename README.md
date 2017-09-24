@@ -22,7 +22,7 @@ python manage.py test
 Should run the tests as part of your test suite(s).
 
 ## 1 test_error_fields.py
-There is a whole medium article on why this was written It Allows you to check the forms for missing error fields.
+There is a whole medium article on why this was written https://medium.com/@osaetindaniel/using-dynamic-unit-tests-to-build-sane-django-forms-329d4b3b414d It Allows you to check the forms for missing error fields.
 
 ## 2 test_static_assets.py
 This test allows you to test links to static files in your templates to see if they're reachable. It uses

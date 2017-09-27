@@ -6,20 +6,32 @@ to check all forms/fields in a template for corresponding error messages.
 
 import re
 from os import walk
-from os.path import join
+from os.path import join, sep
+from configparser import ConfigParser
 
 from django.test import TestCase
 
+
+# Load Config file
+config = ConfigParser()
+
+parent_dir = __file__.split(sep)[-2]
+config_file = join(parent_dir, 'config.ini')
+config.read(config_file)
+
 # Compile Regexes
 FIELD_REGEX = re.compile(
-    r"{[{%]\s*.*\b(\w*form(?!set)\w*\.\w+)[|\w:\s'\"-]*\s*[%}]}")
+    r"{[{%]\s*.*\b(\w*form(?!set|.non_field_errors)\w*\.\w+)[|\w:\s'\"-]*\s*[%}]}"
+    )
 ERROR_REGEX = re.compile(r'{{\s*(.*form\w*\.\w+\.errors)\s*}}')
 FORMS_REGEX = re.compile(r"{[{%]\s*.*\b(\w*form(?!set)\w*)\.\w+\s*[%}]}")
 NON_FIELD_ERROR_REGEX = re.compile(r'{{\s*(.*form\w*\.non_field_errors)\s*}}')
 
-UNWANTED_FIELDS = (
-    'form.remember', 'form.non_field_errors'
-)
+try:
+    UNWANTED_FIELDS = config['Form Fields']['unwanted_fields'].split(',')
+except KeyError:
+    UNWANTED_FIELDS = []
+
 
 class FormTestCase(TestCase):
     """Test case to check templates for missing error fields."""

@@ -6,15 +6,26 @@ To check if all application static assets are reachable
 
 import re
 from os import walk
-from os.path import join
+from os.path import join, sep
+from configparser import ConfigParser
 
 from django.test import TestCase
 from django.contrib.staticfiles import finders
 
+# Load Config file
+config = ConfigParser()
+
+parent_dir = __file__.split(sep)[-2]
+config_file = join(parent_dir, 'config.ini')
+config.read(config_file)
 
 SCRIPTS_REGEX = r"<script.*src=[\"']{% static [\"'](.*)[\"'] %}\".*</script>"
 LINKS_REGEX = r"<link.*href=[\"']{% static [\"'](.*)[\"'] %}[\"']"
-UNWANTED_ASSETS = tuple()
+
+try:
+    UNWANTED_ASSETS = config['Static Assets']['unwanted_assets'].split(',')
+except KeyError:
+    UNWANTED_ASSETS = []
 
 
 class AssetsTestCase(TestCase):

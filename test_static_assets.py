@@ -5,8 +5,8 @@ To check if all application static assets are reachable
 """
 
 import re
-from os import walk
-from os.path import join, sep
+from os import walk, chdir
+from os.path import dirname, abspath, join
 from configparser import ConfigParser
 
 from django.test import TestCase
@@ -15,7 +15,7 @@ from django.contrib.staticfiles import finders
 # Load Config file
 config = ConfigParser()
 
-parent_dir = __file__.split(sep)[-2]
+parent_dir = dirname(abspath(__file__))
 config_file = join(parent_dir, 'config.ini')
 config.read(config_file)
 

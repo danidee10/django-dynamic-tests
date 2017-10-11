@@ -34,6 +34,6 @@ To locate static files on the disk, without making a http request. This Speeds u
 
 
 ## Configuration
-A Sample `config.ini` file is included alongside the tests, This file can be used to control the properties (Form/Static Assets) that are eventually tested.
+A Sample `config.ini.sample` file is included alongside the tests, This file can be used to control the properties (Form/Static Assets) that are eventually tested.
 
 You should use this file, when you have particular properties that you don't want to test E.g Production Version(s) of JavaScript files that are generated during your build/deploy process.

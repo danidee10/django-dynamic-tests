@@ -21,6 +21,7 @@ config.read(config_file)
 
 SCRIPTS_REGEX = r"<script.*src=[\"']{% static [\"'](.*)[\"'] %}\".*</script>"
 LINKS_REGEX = r"<link.*href=[\"']{% static [\"'](.*)[\"'] %}[\"']"
+IMAGE_REGEX = r"<img.*src=[\"']{% static [\"'](.*)[\"'] %}[\"']"
 
 try:
     UNWANTED_ASSETS = config['Static Assets']['unwanted_assets'].split(',')
@@ -69,15 +70,18 @@ def parse_templates(file_path):
 
         app_scripts = re.findall(SCRIPTS_REGEX, content)
         app_links = re.findall(LINKS_REGEX, content)
+        image_links = re.findall(IMAGE_REGEX, content)
 
         # Remove static files that shouldn't be checked
         app_scripts = filter(remove_unwanted_assets, app_scripts)
         app_links = filter(remove_unwanted_assets, app_links)
+        image_links = filter(remove_unwanted_assets, image_links)
 
         return {
             'scripts': (app_scripts,),
-            'links': (app_links,)
-            }
+            'links': (app_links,),
+            'images': (image_links,)
+        }
 
 
 def add_tests(template, **kwargs):

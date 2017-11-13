@@ -1,36 +1,38 @@
 """
 Generate tests
 
-To check if all application static assets are reachable
+To check if all application static assets (scripts, css and imagees)
+are reachable
 """
 
 import re
-from os import walk, chdir
-from os.path import dirname, abspath, join
+from os import walk, path
 from configparser import ConfigParser
 
 from django.test import TestCase
 from django.contrib.staticfiles import finders
 
 # Load Config file
-config = ConfigParser()
+CONFIG = ConfigParser()
 
-parent_dir = dirname(abspath(__file__))
-config_file = join(parent_dir, 'config.ini')
-config.read(config_file)
+PARENT_DIR = path.dirname(path.abspath(__file__))
+CONFIG_FILE = path.join(PARENT_DIR, 'config.ini')
+CONFIG.read(CONFIG_FILE)
 
-SCRIPTS_REGEX = r"<script.*src=[\"']{% static [\"'](.*)[\"'] %}\".*</script>"
-LINKS_REGEX = r"<link.*href=[\"']{% static [\"'](.*)[\"'] %}[\"']"
-IMAGE_REGEX = r"<img.*src=[\"']{% static [\"'](.*)[\"'] %}[\"']"
+ASSETS_REGEX = r"<(link|script|img)+.*(href|src)+=[\"']{% static [\"']([\w|/|\.|-]+)"
 
 try:
-    UNWANTED_ASSETS = config['Static Assets']['unwanted_assets'].split(',')
+    UNWANTED_ASSETS = CONFIG['Static Assets']['unwanted_assets'].split(',')
 except KeyError:
     UNWANTED_ASSETS = []
 
 
 class AssetsTestCase(TestCase):
-    """TestCase to check if all static assets in the app are reachable."""
+    """
+    TestCase to check if all static assets in the app are reachable.
+    
+    The Tests are dynamically generated and added to this class
+    """
     pass
 
 
@@ -68,20 +70,16 @@ def parse_templates(file_path):
     with open(file_path) as html_file:
         content = html_file.read()
 
-        app_scripts = re.findall(SCRIPTS_REGEX, content)
-        app_links = re.findall(LINKS_REGEX, content)
-        image_links = re.findall(IMAGE_REGEX, content)
+        asset_links = re.findall(ASSETS_REGEX, content)
 
         # Remove static files that shouldn't be checked
-        app_scripts = filter(remove_unwanted_assets, app_scripts)
-        app_links = filter(remove_unwanted_assets, app_links)
-        image_links = filter(remove_unwanted_assets, image_links)
+        asset_links = list(filter(remove_unwanted_assets, asset_links))
+        
+        # Get the Third group in each match
+        if asset_links:
+            asset_links = [asset_link[2] for asset_link in asset_links]
 
-        return {
-            'scripts': (app_scripts,),
-            'links': (app_links,),
-            'images': (image_links,)
-        }
+        return {'static_assets': (asset_links,)}
 
 
 def add_tests(template, **kwargs):
@@ -101,7 +99,7 @@ def get_templates():
     for root, _, files in walk('.'):
         for file in files:
             if '.html' in file:
-                templates.append(join(root, file))
+                templates.append(path.join(root, file))
 
     return templates
 

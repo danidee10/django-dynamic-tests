@@ -19,7 +19,7 @@ PARENT_DIR = path.dirname(path.abspath(__file__))
 CONFIG_FILE = path.join(PARENT_DIR, 'config.ini')
 CONFIG.read(CONFIG_FILE)
 
-ASSETS_REGEX = r"<(link|script|img)+.*(href|src)+=[\"']{% static [\"']([\w|/|\.|-]+)"
+ASSETS_REGEX = r"<(link|script|img)+.*(href|src)+=[\"']{% static [\"']([^\s\"']+)"
 
 try:
     UNWANTED_ASSETS = CONFIG['Static Assets']['unwanted_assets'].split(',')

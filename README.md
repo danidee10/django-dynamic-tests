@@ -32,6 +32,15 @@ This test allows you to test links to static files in your templates to see if t
 
 To locate static files on the disk, without making a http request. This Speeds up the tests significantly.
 
+### 3 test_hardcoded_urls.py
+This generates tests to check if templates (links, scripts and images) have harcoded url's in them e.g 
+
+`<img src="../static/frontend/image.jpg" />`. 
+
+It's always better to use Django template tags to make the codebase more maintanable and make it easier to switch to a CDN for Serving Static files.
+
+`<img src="{% static 'myapp/image.jpg' %}" />`
+
 
 ## Configuration
 A Sample `config.ini.sample` file is included alongside the tests, This file can be used to control the properties (Form/Static Assets) that are eventually tested.

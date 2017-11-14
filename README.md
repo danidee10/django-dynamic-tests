@@ -41,6 +41,8 @@ It's always better to use Django template tags to make the codebase more maintan
 
 `<img src="{% static 'myapp/image.jpg' %}" />`
 
+If you have a lot of relative links that you want to convert to use Django's `static` template tag. You can easily use ![Staticfy](https://github.com/danidee10/Staticfy) to achieve that.
+
 
 ## Configuration
 A Sample `config.ini.sample` file is included alongside the tests, This file can be used to control the properties (Form/Static Assets) that are eventually tested.

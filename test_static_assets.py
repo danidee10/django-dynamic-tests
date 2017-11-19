@@ -36,10 +36,10 @@ class AssetsTestCase(TestCase):
     pass
 
 
-def remove_unwanted_assets(field):
+def remove_unwanted_assets(asset):
     """Filter out unwanted static files that shouldn't be checked."""
 
-    return field not in UNWANTED_ASSETS
+    return asset not in UNWANTED_ASSETS
 
 
 def build_test(asset, file_path):
@@ -72,12 +72,11 @@ def parse_templates(file_path):
 
         asset_links = re.findall(ASSETS_REGEX, content)
 
+        # Get the Third group in each match
+        asset_links = [asset_link[2] for asset_link in asset_links]
+
         # Remove static files that shouldn't be checked
         asset_links = list(filter(remove_unwanted_assets, asset_links))
-        
-        # Get the Third group in each match
-        if asset_links:
-            asset_links = [asset_link[2] for asset_link in asset_links]
 
         return {'static_assets': (asset_links,)}
 

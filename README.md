@@ -1,9 +1,7 @@
 # django-dynamic-tests
-Collection of tests to Analyze and test Django templates for common errors.
+django-dynamic-tests is a collection of tests that check Django templates for common errors and violation of best practices like hardcoding static URL's, missing staticfiles etc.
 
 The tests use Regular expressions to extract information from the templates. These are then used to generate the tests dynamically.
-
-I nearly named this repo **django-lint** but this is not a linter/lint-tool. Even though it analyzes your templates statically, It doesn't give you any hint/advice on how to fix your code.
 
 The tests are written to be as general as possible, but if you have specific use cases you can tweak them to suit you. But they should work if they're dropped into any Django project that follows the "Django way" of doing things.
 

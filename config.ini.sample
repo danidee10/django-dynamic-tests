@@ -7,3 +7,4 @@ unwanted_fields=
 # Unwanted Static Assets that shouldn't be checked (String separated by comma's)
 [Static Assets]
 unwanted_assets=UNWANTED_ASSETS=
+excluded_folders=EXCLUDED_FOLDERS=

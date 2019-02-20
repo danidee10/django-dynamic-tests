@@ -6,8 +6,8 @@ to check all forms/fields in a template for corresponding error messages.
 
 import re
 from os import walk
-from os.path import dirname, abspath, join
 from configparser import ConfigParser
+from os.path import dirname, abspath, join
 
 from django.test import TestCase
 

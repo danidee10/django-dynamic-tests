@@ -7,12 +7,30 @@ the static tag.
 
 from re import findall
 from os import walk, path
+from configparser import ConfigParser
+from os.path import dirname, abspath, join
 
 from django.test import TestCase
 
 
+# Load Config file
+config = ConfigParser()
+
+parent_dir = dirname(abspath(__file__))
+config_file = join(parent_dir, 'config.ini')
+config.read(config_file)
+
+DEFAULT_EXCLUDED_FOLDERS = ['/node_modules', '/coverage']
+
+try:
+    EXCLUDED_FOLDERS = config['Static Assets']['excluded_folders'].split(',')
+    EXCLUDED_FOLDERS += DEFAULT_EXCLUDED_FOLDERS
+except KeyError:
+    UNWANTED_FIELDS = []
+    EXCLUDED_FOLDERS = DEFAULT_EXCLUDED_FOLDERS
+
+
 HARDCODED_URLS_REGEX = r"<(link|script|img)+.*(href|src)+=[\"']((?!http|{|//)[^\s]+)[\"']"
-EXCLUDED_FOLDERS = ['/node_modules', '/coverage']
 
 
 class HardCodedURLTestCase(TestCase):
